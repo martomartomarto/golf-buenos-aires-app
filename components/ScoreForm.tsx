@@ -38,7 +38,7 @@ export default function ScoreForm() {
       onSubmit={handleSubmit}
       className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md mx-auto text-black"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center">Do not cheat you lame ass player</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">⛳️Do not cheat you lame ass player⛳️</h2>
 
       <input
         name="jugador"
