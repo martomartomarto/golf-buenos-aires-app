@@ -8,7 +8,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredCourses = golfCourses.filter(course =>
-    course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    course.Nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -44,3 +44,4 @@ export default function Home() {
     </>
   );
 }
+
