@@ -11,6 +11,7 @@ export default function ScoreForm() {
     birdies: '',
   });
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -21,17 +22,15 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwcTJxJPBUl2qG0e5FsrqCXTITLmUvK5w5xEUWKLlWl9ubpvZTAFaY8oqJRPz3dhEgPhFw/exec',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwcTJxJPBUI2qG0e5FsrqCXTITLmUvK5w5xEUWKLlWl9ubpvZTAFaY8oqJRPz3dhEgPhFw/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+      });
 
       if (response.ok) {
         setSuccess(true);
+        setError(false);
         setFormData({
           jugador: '',
           fecha: '',
@@ -41,11 +40,12 @@ export default function ScoreForm() {
           birdies: '',
         });
       } else {
-        alert('Error al enviar el formulario. Intente nuevamente.');
+        throw new Error('Error al enviar');
       }
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      alert('Hubo un problema al conectar con Google Sheets.');
+    } catch (err) {
+      console.error('Error al enviar el formulario:', err);
+      setError(true);
+      setSuccess(false);
     }
   };
 
@@ -135,8 +135,13 @@ export default function ScoreForm() {
           ✅ Score cargado con éxito
         </p>
       )}
+
+      {error && (
+        <p className="mt-4 text-red-700 font-semibold flex items-center justify-center">
+          ❌ Hubo un error al enviar el score. Reintentá.
+        </p>
+      )}
     </form>
   );
 }
-
 
