@@ -14,7 +14,7 @@ type Props = {
 
 const GolfCourseCard: React.FC<Props> = ({ course }) => {
   return (
-    <div className="bg-greenGlass rounded-xl shadow-lg p-6 backdrop-blur-md text-white">
+    <div className="bg-greenGlass rounded-xl shadow-lg p-6 backdrop-blur-md text-white flex flex-col justify-center items-center text-center">
       <h2 className="text-xl font-bold mb-2">{course.Nombre}</h2>
       <p>{course.Dirección}</p>
       <p>
@@ -35,3 +35,4 @@ const GolfCourseCard: React.FC<Props> = ({ course }) => {
 };
 
 export default GolfCourseCard;
+
