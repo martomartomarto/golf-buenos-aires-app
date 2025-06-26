@@ -1,9 +1,25 @@
+import React from 'react';
+
+type Props = {
+  course: {
+    Nombre: string;
+    Dirección: string;
+    Localidad: string;
+    "Código Postal": string;
+    Teléfono: string;
+    maps_url: string;
+    rating: number | string;
+  };
+};
+
 const GolfCourseCard: React.FC<Props> = ({ course }) => {
   return (
     <div className="bg-greenGlass rounded-xl shadow-lg p-6 backdrop-blur-md text-white">
       <h2 className="text-xl font-bold mb-2">{course.Nombre}</h2>
       <p>{course.Dirección}</p>
-      <p>{course.Localidad}, CP: {course["Código Postal"]}</p>
+      <p>
+        {course.Localidad}, CP: {course["Código Postal"]}
+      </p>
       <p>Tel: {course.Teléfono}</p>
       <a
         href={course.maps_url}
@@ -17,3 +33,5 @@ const GolfCourseCard: React.FC<Props> = ({ course }) => {
     </div>
   );
 };
+
+export default GolfCourseCard;
