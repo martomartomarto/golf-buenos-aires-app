@@ -18,12 +18,18 @@ export default function Home() {
       </Head>
 
       <main className="min-h-screen px-4 py-10 text-white">
-        <div className="flex justify-end mb-6">
+        <div className="flex justify-end mb-6 gap-2">
           <a
             href="/jugadores"
             className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
           >
             Ver resumen por jugador
+          </a>
+          <a
+            href="/scores"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Cargar score
           </a>
         </div>
 
