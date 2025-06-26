@@ -18,8 +18,8 @@ export default function JugadoresPage() {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed = Papa.parse<ScoreEntry>(csv, { header: true });
-        const data = parsed.data;
+        const parsed = Papa.parse(csv, { header: true });
+        const data = parsed.data as ScoreEntry[];
 
         const resumenData: Record<string, { total: number; count: number }> = {};
 
