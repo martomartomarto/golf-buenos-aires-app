@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useState } from 'react';
 import GolfCourseCard from '../components/GolfCourseCard';
 import golfCourses from '../data/golf-courses.enriched.json';
@@ -19,31 +18,32 @@ export default function Home() {
       </Head>
 
       <main className="min-h-screen px-4 py-10 text-white">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 max-w-5xl mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-center font-poppins mb-4 md:mb-0">
-            Canchas de Golf en Buenos Aires
-          </h1>
-
-          <Link href="/cargar">
-            <button className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded w-full md:w-auto">
-              ➕ Cargar Score
-            </button>
-          </Link>
+        <div className="flex justify-end mb-6">
+          <a
+            href="/jugadores"
+            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
+          >
+            Ver resumen por jugador
+          </a>
         </div>
+
+        <h1 className="text-4xl font-bold text-center mb-4 font-poppins">
+          Canchas de Golf en Buenos Aires
+        </h1>
 
         <div className="flex justify-center mb-8">
           <input
             type="text"
             placeholder="Buscar club..."
-            className="px-4 py-2 rounded-md text-black w-full max-w-md"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="p-2 rounded text-black w-full max-w-md"
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredCourses.map((course, index) => (
-            <GolfCourseCard key={index} course={course} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCourses.map((course, i) => (
+            <GolfCourseCard key={i} course={course} />
           ))}
         </div>
       </main>
