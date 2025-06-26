@@ -1,30 +1,20 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import golfCourses from "../data/golf-courses.enriched.json";
 import GolfCourseCard from "../components/GolfCourseCard";
 
-type GolfCourse = {
-  Nombre: string;
-  Dirección: string;
-  Localidad: string;
-  rating: string;
-  maps_url: string;
-  Telefono: string;
+const HomePage = () => {
+  return (
+    <div className="min-h-screen bg-[url('/augusta.jpg')] bg-cover bg-center p-6">
+      <h1 className="text-3xl font-bold mb-6 text-white drop-shadow-md">
+        Canchas de Golf en Buenos Aires
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {golfCourses.map((course, idx) => (
+          <GolfCourseCard key={idx} course={course} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default function HomePage() {
-  const [courses, setCourses] = useState<GolfCourse[]>([]);
-
-  useEffect(() => {
-    fetch("/data/golf-courses.enriched.json")
-      .then((res) => res.json())
-      .then((data) => setCourses(data));
-  }, []);
-
-  return (
-    <main className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Canchas de Golf en Buenos Aires</h1>
-      {courses.map((course, i) => (
-        <GolfCourseCard key={i} course={course} />
-      ))}
-    </main>
-  );
-}
+export default HomePage;
