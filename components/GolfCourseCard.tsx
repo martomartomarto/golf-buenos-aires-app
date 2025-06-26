@@ -1,30 +1,26 @@
 import React from 'react';
 
-interface GolfCourse {
+type GolfCourse = {
   name: string;
   address: string;
-  phoneNumber?: string;
   rating?: number;
   mapsUrl?: string;
-}
+};
 
 const GolfCourseCard = ({ course }: { course: GolfCourse }) => {
   return (
-    <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl shadow-md p-4 mb-4">
-      <h2 className="text-xl font-bold">{course.name}</h2>
-      <p>{course.address}</p>
-      {course.phoneNumber && (
-        <p className="mt-1">📞 {course.phoneNumber}</p>
-      )}
+    <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300">
+      <h2 className="text-xl font-semibold mb-1">{course.name}</h2>
+      <p className="text-gray-700 text-sm mb-2">{course.address}</p>
       {course.rating && (
-        <p className="mt-1">⭐ {course.rating}</p>
+        <p className="text-yellow-600 text-sm mb-1">⭐ {course.rating}</p>
       )}
       {course.mapsUrl && (
         <a
           href={course.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-800 underline mt-2 inline-block"
+          className="text-blue-700 text-sm underline"
         >
           Ver en Google Maps
         </a>
@@ -34,4 +30,5 @@ const GolfCourseCard = ({ course }: { course: GolfCourse }) => {
 };
 
 export default GolfCourseCard;
+
 
