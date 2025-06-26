@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import GolfCourseCard from '../components/GolfCourseCard';
 import ScoreForm from '../components/ScoreForm';
-import golfCourses from '../data/golfCourses.json';
+import golfCourses from '../data/golf-courses.enriched.json';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,4 +44,3 @@ export default function Home() {
     </>
   );
 }
-
