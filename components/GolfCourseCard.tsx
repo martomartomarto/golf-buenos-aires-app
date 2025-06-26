@@ -16,12 +16,14 @@ type Props = {
 
 const GolfCourseCard = ({ course }: Props) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition duration-300">
-      <h2 className="text-xl font-semibold mb-2">{course.Nombre}</h2>
-      <p className="text-sm text-gray-700 mb-1">{course.Dirección}</p>
-      <p className="text-sm text-gray-600">{course.Localidad}, CP: {course["Código Postal"]}</p>
+    <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-lg p-5 hover:shadow-xl transition duration-300">
+      <h2 className="text-xl font-bold mb-2">{course.Nombre}</h2>
+      <p className="text-sm text-gray-800">{course.Dirección}</p>
+      <p className="text-sm text-gray-700">
+        {course.Localidad}, CP: {course["Código Postal"]}
+      </p>
       {course.Teléfono && (
-        <p className="text-sm text-gray-600">Tel: {course.Teléfono}</p>
+        <p className="text-sm text-gray-700 mt-1">Tel: {course.Teléfono}</p>
       )}
       {course.maps_url && (
         <a
@@ -34,7 +36,9 @@ const GolfCourseCard = ({ course }: Props) => {
         </a>
       )}
       {course.rating && (
-        <p className="text-sm text-yellow-600 mt-2">Rating: {course.rating}</p>
+        <p className="text-sm text-yellow-700 mt-2 font-medium">
+          Rating: {course.rating}
+        </p>
       )}
     </div>
   );
