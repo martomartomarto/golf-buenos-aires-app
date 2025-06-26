@@ -11,7 +11,6 @@ export default function ScoreForm() {
     birdies: '',
   });
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -22,33 +21,31 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        'https://script.google.com/macros/s/AKfyc.../exec', // ✅ reemplazá con tu URL completa del script desplegado
-        {
-          method: 'POST',
-          mode: 'no-cors', // Google Apps Script requiere esto para evitar problemas CORS
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      // No se puede leer la respuesta si se usa no-cors, así que asumimos éxito si no hay error
-      setSuccess(true);
-      setError(false);
-      setFormData({
-        jugador: '',
-        fecha: '',
-        club: '',
-        gross: '',
-        neto: '',
-        birdies: '',
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-    } catch (err) {
-      console.error('Error al enviar el score:', err);
-      setSuccess(false);
-      setError(true);
+
+      const result = await response.json();
+      if (result.result === 'success') {
+        setSuccess(true);
+        setFormData({
+          jugador: '',
+          fecha: '',
+          club: '',
+          gross: '',
+          neto: '',
+          birdies: '',
+        });
+      } else {
+        alert('Error al enviar el score.');
+      }
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+      alert('Error de red al enviar el score.');
     }
   };
 
@@ -136,11 +133,6 @@ export default function ScoreForm() {
       {success && (
         <p className="mt-4 text-green-700 font-semibold flex items-center justify-center">
           ✅ Score cargado con éxito
-        </p>
-      )}
-      {error && (
-        <p className="mt-4 text-red-600 font-semibold flex items-center justify-center">
-          ❌ Hubo un error al cargar el score
         </p>
       )}
     </form>
