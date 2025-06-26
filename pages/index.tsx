@@ -1,46 +1,24 @@
 import React from 'react';
+import GolfCourseCard from '../components/GolfCourseCard';
+import courses from '../data/golf-courses.enriched.json';
 
-type Props = {
-  course: {
-    Nombre: string;
-    Dirección: string;
-    Localidad: string;
-    'Código Postal': string;
-    Teléfono: string;
-    maps_url: string;
-    rating: string | number;
-  };
-};
-
-const GolfCourseCard = ({ course }: Props) => {
+const Home = () => {
   return (
-    <div className="bg-white/80 rounded-xl shadow-lg p-4 backdrop-blur-md">
-      <h2 className="text-xl font-bold mb-2">{course.Nombre}</h2>
-      <p>{course.Dirección}</p>
-      <p>{course.Localidad}</p>
-      <p>{course['Código Postal']}</p>
-      {course.Teléfono && (
-        <p className="flex items-center">
-          <span className="mr-2">📞</span> {course.Teléfono}
-        </p>
-      )}
-      {course.rating && (
-        <p className="flex items-center">
-          <span className="mr-1">⭐</span> {course.rating}
-        </p>
-      )}
-      {course.maps_url && (
-        <a
-          href={course.maps_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-700 underline mt-2 block"
-        >
-          Ver en Google Maps
-        </a>
-      )}
+    <div
+      className="min-h-screen bg-cover bg-center p-4"
+      style={{ backgroundImage: "url('/Augusta.jpg')" }}
+    >
+      <h1 className="text-4xl font-bold text-white mb-6 text-center drop-shadow-md">
+        Canchas de Golf en Buenos Aires
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {courses.map((course, index) => (
+          <GolfCourseCard key={index} course={course} />
+        ))}
+      </div>
     </div>
   );
 };
 
-export default GolfCourseCard;
+export default Home;
+
