@@ -11,24 +11,20 @@ interface ScoreEntry {
   Birdies: string;
 }
 
-export default function PersonsPage() {
+export default function JugadoresPage() {
   const [resumen, setResumen] = useState<Record<string, { total: number; count: number }>>({});
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed = Papa.parse(csv, {
-          header: true,
-          skipEmptyLines: true
-        });
-
-        const data = parsed.data as ScoreEntry[];
+        const parsed = Papa.parse<ScoreEntry>(csv, { header: true });
+        const data = parsed.data;
 
         const resumenData: Record<string, { total: number; count: number }> = {};
 
         data.forEach(entry => {
-          const jugador = entry.Jugador;
+          const jugador = entry.Jugador?.trim();
           const neto = Number(entry.Neto);
 
           if (!jugador || isNaN(neto)) return;
@@ -87,4 +83,5 @@ export default function PersonsPage() {
     </>
   );
 }
+
 
