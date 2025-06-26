@@ -1,38 +1,46 @@
-import React, { useState } from "react";
-import GolfCourseCard from "@/components/GolfCourseCard";
-import ScoreForm from "@/components/ScoreForm";
-import courses from "@/data/golf-courses.enriched.json";
+import Head from 'next/head';
+import { useState } from 'react';
+import GolfCourseCard from '../components/GolfCourseCard';
+import ScoreForm from '../components/ScoreForm';
+import golfCourses from '../data/golfCourses.json';
 
-export default function HomePage() {
-  const [query, setQuery] = useState("");
+export default function Home() {
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredCourses = courses.filter((course) =>
-    course.Nombre.toLowerCase().includes(query.toLowerCase())
+  const filteredCourses = golfCourses.filter(course =>
+    course.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="text-white px-4 py-6">
-      <h1 className="text-3xl md:text-4xl font-bold text-center font-poppins mb-6">Canchas de Golf en Buenos Aires</h1>
+    <>
+      <Head>
+        <title>Canchas de Golf en Buenos Aires</title>
+        <meta name="description" content="Listado de canchas de golf" />
+      </Head>
 
-      <div className="flex justify-center mb-6">
-        <input
-          type="text"
-          placeholder="Buscar club..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="p-2 rounded border border-gray-300 text-black w-full max-w-md"
-        />
-      </div>
+      <main className="min-h-screen px-4 py-10 text-white">
+        <h1 className="text-4xl font-bold text-center mb-4 font-poppins">
+          Canchas de Golf en Buenos Aires
+        </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.map((course, index) => (
-          <GolfCourseCard key={index} course={course} />
-        ))}
-      </div>
+        <div className="flex justify-center mb-8">
+          <input
+            type="text"
+            placeholder="Buscar club..."
+            className="px-4 py-2 rounded-md text-black w-full max-w-md"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
-      {/* FORMULARIO NUEVO */}
-      <ScoreForm />
-    </div>
+        <ScoreForm />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {filteredCourses.map((course, index) => (
+            <GolfCourseCard key={index} course={course} />
+          ))}
+        </div>
+      </main>
+    </>
   );
 }
-
