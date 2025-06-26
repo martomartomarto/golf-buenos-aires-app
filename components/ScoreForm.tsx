@@ -10,6 +10,7 @@ export default function ScoreForm() {
     neto: '',
     birdies: '',
   });
+
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -21,30 +22,30 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec',
+        {
+          method: 'POST',
+          mode: 'no-cors', // importante para evitar bloqueos CORS si no hay cabeceras adecuadas en el GAS
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-      const result = await response.json();
-      if (result.result === 'success') {
-        setSuccess(true);
-        setFormData({
-          jugador: '',
-          fecha: '',
-          club: '',
-          gross: '',
-          neto: '',
-          birdies: '',
-        });
-      } else {
-        alert('Error al enviar el score.');
-      }
+      // no-cors hace que no podamos leer la respuesta, así que asumimos éxito
+      setSuccess(true);
+      setFormData({
+        jugador: '',
+        fecha: '',
+        club: '',
+        gross: '',
+        neto: '',
+        birdies: '',
+      });
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
+      console.error('Error al enviar el score:', error);
       alert('Error de red al enviar el score.');
     }
   };
@@ -56,7 +57,9 @@ export default function ScoreForm() {
       onSubmit={handleSubmit}
       className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md mx-auto text-black"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center">⛳️Do not cheat you lame ass player⛳️</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        ⛳️Do not cheat you lame ass player⛳️
+      </h2>
 
       <input
         name="jugador"
