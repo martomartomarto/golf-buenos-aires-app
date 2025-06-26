@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useState } from 'react';
 import GolfCourseCard from '../components/GolfCourseCard';
 import golfCourses from '../data/golf-courses.enriched.json';
@@ -18,9 +19,17 @@ export default function Home() {
       </Head>
 
       <main className="min-h-screen px-4 py-10 text-white">
-        <h1 className="text-4xl font-bold text-center mb-4 font-poppins">
-          Canchas de Golf en Buenos Aires
-        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 max-w-5xl mx-auto px-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-center font-poppins mb-4 md:mb-0">
+            Canchas de Golf en Buenos Aires
+          </h1>
+
+          <Link href="/cargar">
+            <button className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded w-full md:w-auto">
+              ➕ Cargar Score
+            </button>
+          </Link>
+        </div>
 
         <div className="flex justify-center mb-8">
           <input
