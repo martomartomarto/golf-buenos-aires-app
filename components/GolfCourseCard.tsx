@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface GolfCourse {
   Nombre: string;
   Dirección: string;
@@ -10,26 +8,24 @@ interface GolfCourse {
   rating: string | number;
 }
 
-const GolfCourseCard: React.FC<{ course: GolfCourse }> = ({ course }) => {
+export default function GolfCourseCard({ course }: { course: GolfCourse }) {
   return (
-    <div className="rounded-2xl shadow-lg bg-white bg-opacity-90 p-6 flex flex-col gap-2 transition hover:scale-[1.02] duration-200">
-      <h2 className="text-xl font-semibold">{course.Nombre}</h2>
-      <p className="text-sm text-gray-700">{course.Dirección}</p>
-      <p className="text-sm text-gray-700">
+    <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all duration-200">
+      <h2 className="text-lg font-semibold mb-2">{course.Nombre}</h2>
+      <p className="text-sm text-gray-600">{course.Dirección}</p>
+      <p className="text-sm text-gray-600">
         {course.Localidad}, CP: {course["Código Postal"]}
       </p>
-      <p className="text-sm text-gray-700">Tel: {course.Teléfono}</p>
+      <p className="text-sm text-gray-600">Tel: {course.Teléfono}</p>
       <a
         href={course.maps_url}
+        className="text-sm text-blue-600 underline block mt-2"
         target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm text-blue-600 underline"
       >
         Ver en Google Maps
       </a>
-      <p className="text-sm text-gray-700">Rating: {course.rating}</p>
+      <p className="text-sm text-gray-800 mt-1">Rating: {course.rating}</p>
     </div>
   );
-};
+}
 
-export default GolfCourseCard;
