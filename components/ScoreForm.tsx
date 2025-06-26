@@ -19,16 +19,37 @@ export default function ScoreForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Score enviado:', formData); // Podés reemplazar esto por tu lógica real
-    setSuccess(true);
-    setFormData({
-      jugador: '',
-      fecha: '',
-      club: '',
-      gross: '',
-      neto: '',
-      birdies: '',
-    });
+
+    try {
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbwcTJxJPBUl2qG0e5FsrqCXTITLmUvK5w5xEUWKKLWl9ubpvZTAFaY8oqJRPz3dhEgPhFw/exec',
+        {
+          method: 'POST',
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log('Score enviado:', formData);
+        setSuccess(true);
+        setFormData({
+          jugador: '',
+          fecha: '',
+          club: '',
+          gross: '',
+          neto: '',
+          birdies: '',
+        });
+      } else {
+        alert('Hubo un error al enviar los datos. Intentá de nuevo.');
+      }
+    } catch (err) {
+      alert('Error de conexión. Verificá tu red o la URL del script.');
+      console.error(err);
+    }
   };
 
   const clubOptions = golfCourses.map(c => c.Nombre).sort();
