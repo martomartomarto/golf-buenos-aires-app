@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url('/augusta.jpg')` }} // asegurate que esté en /public
+      style={{ backgroundImage: `url('/augusta.jpg')` }}
     >
       <div className="bg-black bg-opacity-50 min-h-screen px-6 py-12">
         <h1 className="text-4xl font-bold text-white text-center mb-12">
