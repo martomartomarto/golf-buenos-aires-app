@@ -1,66 +1,39 @@
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 import Papa from 'papaparse';
 
-type ScoreEntry = {
+interface ScoreEntry {
   club: string;
   fecha: string;
   jugador: string;
-  gross: string;
-  neto: string;
-  birdies: string;
-};
+  gross: number;
+  neto: number;
+  birdies: number;
+}
 
-type Summary = {
-  club: string;
-  vecesJugado: number;
-  mejorGross: number;
-  mejorNeto: number;
-  maxBirdies: number;
-};
-
-export default function PlayersSummaryPage() {
-  const [data, setData] = useState<ScoreEntry[]>([]);
-  const [jugadores, setJugadores] = useState<string[]>([]);
-  const [selected, setSelected] = useState('');
-  const [summary, setSummary] = useState<Summary[]>([]);
+export default function PersonsPage() {
+  const [resumen, setResumen] = useState<Record<string, { total: number; count: number }>>({});
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
-      .then(res => res.text())
+      .then(response => response.text())
       .then(csv => {
         const parsed = Papa.parse(csv, { header: true });
-        const entries = parsed.data as ScoreEntry[];
-        setData(entries.filter(row => row.jugador));
-        const uniqueNames = Array.from(new Set(entries.map(row => row.jugador))).filter(Boolean);
-        setJugadores(uniqueNames);
+        const data = parsed.data as ScoreEntry[];
+
+        const resumenData: Record<string, { total: number; count: number }> = {};
+
+        data.forEach(entry => {
+          if (!resumenData[entry.jugador]) {
+            resumenData[entry.jugador] = { total: 0, count: 0 };
+          }
+          resumenData[entry.jugador].total += Number(entry.neto);
+          resumenData[entry.jugador].count += 1;
+        });
+
+        setResumen(resumenData);
       });
   }, []);
-
-  const handleSelect = (jugador: string) => {
-    setSelected(jugador);
-    const datos = data.filter(d => d.jugador === jugador);
-    const resumen: Record<string, Summary> = {};
-
-    datos.forEach(d => {
-      if (!resumen[d.club]) {
-        resumen[d.club] = {
-          club: d.club,
-          vecesJugado: 0,
-          mejorGross: Infinity,
-          mejorNeto: Infinity,
-          maxBirdies: 0,
-        };
-      }
-      const r = resumen[d.club];
-      r.vecesJugado += 1;
-      r.mejorGross = Math.min(r.mejorGross, parseInt(d.gross));
-      r.mejorNeto = Math.min(r.mejorNeto, parseInt(d.neto));
-      r.maxBirdies = Math.max(r.maxBirdies, parseInt(d.birdies));
-    });
-
-    setSummary(Object.values(resumen));
-  };
 
   return (
     <>
@@ -68,53 +41,40 @@ export default function PlayersSummaryPage() {
         <title>Resumen por Jugador</title>
       </Head>
 
-      <main className="min-h-screen p-8 bg-white bg-opacity-90 font-poppins">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Resumen por Jugador</h1>
+      <main className="min-h-screen p-10 bg-white bg-opacity-90 font-poppins">
+        <div className="mb-6">
           <a
             href="/"
-            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900"
+            className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded"
           >
-            ⬅ Volver al inicio
+            ← Volver al inicio
           </a>
         </div>
 
-        <select
-          value={selected}
-          onChange={e => handleSelect(e.target.value)}
-          className="mb-6 px-4 py-2 rounded border border-gray-300 text-black"
-        >
-          <option value="">Seleccioná un jugador</option>
-          {jugadores.map((j, i) => (
-            <option key={i} value={j}>{j}</option>
-          ))}
-        </select>
+        <h1 className="text-3xl font-bold mb-6 text-center">Resumen por Jugador</h1>
 
-        {summary.length > 0 && (
-          <table className="w-full text-sm text-black bg-white border border-gray-300 rounded">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-2 border">Club</th>
-                <th className="p-2 border">Veces Jugado</th>
-                <th className="p-2 border">Mejor Gross</th>
-                <th className="p-2 border">Mejor Neto</th>
-                <th className="p-2 border">Max Birdies</th>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="border px-4 py-2">Jugador</th>
+              <th className="border px-4 py-2">Promedio Neto</th>
+              <th className="border px-4 py-2">Rondas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(resumen).map(([jugador, stats]) => (
+              <tr key={jugador} className="hover:bg-gray-100">
+                <td className="border px-4 py-2">{jugador}</td>
+                <td className="border px-4 py-2">
+                  {(stats.total / stats.count).toFixed(2)}
+                </td>
+                <td className="border px-4 py-2">{stats.count}</td>
               </tr>
-            </thead>
-            <tbody>
-              {summary.map((s, i) => (
-                <tr key={i}>
-                  <td className="p-2 border">{s.club}</td>
-                  <td className="p-2 border">{s.vecesJugado}</td>
-                  <td className="p-2 border">{s.mejorGross}</td>
-                  <td className="p-2 border">{s.mejorNeto}</td>
-                  <td className="p-2 border">{s.maxBirdies}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
       </main>
     </>
   );
 }
+
