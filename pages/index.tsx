@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import GolfCourseCard from '../components/GolfCourseCard';
-import ScoreForm from '../components/ScoreForm';
 import golfCourses from '../data/golf-courses.enriched.json';
 
 export default function Home() {
@@ -32,8 +31,6 @@ export default function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
-        <ScoreForm />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredCourses.map((course, index) => (
