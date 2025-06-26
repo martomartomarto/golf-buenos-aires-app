@@ -3,10 +3,11 @@ import { useState } from "react";
 export default function ScoreForm() {
   const [form, setForm] = useState({
     nombre: "",
+    fecha: "",
     club: "",
     gross: "",
     neto: "",
-    birdies: ""
+    birdies: "",
   });
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -31,7 +32,14 @@ export default function ScoreForm() {
 
       if (response.ok) {
         setStatus("success");
-        setForm({ nombre: "", club: "", gross: "", neto: "", birdies: "" });
+        setForm({
+          nombre: "",
+          fecha: "",
+          club: "",
+          gross: "",
+          neto: "",
+          birdies: "",
+        });
       } else {
         throw new Error("Error al enviar");
       }
@@ -44,13 +52,20 @@ export default function ScoreForm() {
     <form onSubmit={handleSubmit} className="bg-white bg-opacity-80 p-6 rounded-2xl shadow-lg max-w-xl mx-auto mt-8 text-black font-poppins">
       <h2 className="text-xl font-bold mb-4 text-center">Cargar Score</h2>
 
-      {["nombre", "club", "gross", "neto", "birdies"].map((field) => (
+      {[
+        { name: "nombre", placeholder: "Nombre" },
+        { name: "fecha", placeholder: "Fecha (DD/MM/AAAA)" },
+        { name: "club", placeholder: "Club" },
+        { name: "gross", placeholder: "Gross" },
+        { name: "neto", placeholder: "Neto" },
+        { name: "birdies", placeholder: "Birdies" },
+      ].map(({ name, placeholder }) => (
         <input
-          key={field}
-          name={field}
+          key={name}
+          name={name}
           type="text"
-          placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-          value={(form as any)[field]}
+          placeholder={placeholder}
+          value={(form as any)[name]}
           onChange={handleChange}
           className="mb-3 w-full p-2 rounded border border-gray-300"
           required
@@ -66,3 +81,4 @@ export default function ScoreForm() {
     </form>
   );
 }
+
