@@ -1,30 +1,37 @@
+import React from 'react';
+
 interface GolfCourse {
-  Nombre: string;
-  Dirección: string;
-  Localidad: string;
-  rating?: string;
-  maps_url: string;
-  Telefono: string;
+  name: string;
+  address: string;
+  phoneNumber?: string;
+  rating?: number;
+  mapsUrl?: string;
 }
 
-export default function GolfCourseCard({ course }: { course: GolfCourse }) {
+const GolfCourseCard = ({ course }: { course: GolfCourse }) => {
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 shadow-md space-y-2">
-      <h2 className="text-xl font-bold">{course.Nombre}</h2>
-      <p className="text-sm">{course.Dirección}, {course.Localidad}</p>
-      <p className="text-sm">📞 {course.Telefono}</p>
-      {course.rating && (
-        <p className="mt-1 text-sm">⭐ {course.rating}</p>
+    <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl shadow-md p-4 mb-4">
+      <h2 className="text-xl font-bold">{course.name}</h2>
+      <p>{course.address}</p>
+      {course.phoneNumber && (
+        <p className="mt-1">📞 {course.phoneNumber}</p>
       )}
-      <a
-        href={course.maps_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 underline text-sm inline-block mt-2"
-      >
-        Ver en Google Maps
-      </a>
+      {course.rating && (
+        <p className="mt-1">⭐ {course.rating}</p>
+      )}
+      {course.mapsUrl && (
+        <a
+          href={course.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-800 underline mt-2 inline-block"
+        >
+          Ver en Google Maps
+        </a>
+      )}
     </div>
   );
-}
+};
+
+export default GolfCourseCard;
 
