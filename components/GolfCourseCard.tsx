@@ -1,4 +1,3 @@
-
 interface GolfCourse {
   Nombre: string;
   Dirección: string;
@@ -15,14 +14,16 @@ export default function GolfCourseCard({ course }: { course: GolfCourse }) {
       <p className="text-sm">{course.Dirección}, {course.Localidad}</p>
       <p className="text-sm">📞 {course.Telefono}</p>
       {course.rating && <p className="mt-1">⭐ {course.rating}</p>}
-      <a
-        href={course.maps_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 underline mt-2 inline-block"
-      >
-        Ver en Google Maps
-      </a>
+      {course.maps_url && (
+        <a
+          href={course.maps_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline mt-2 inline-block"
+        >
+          Ver en Google Maps
+        </a>
+      )}
     </div>
   );
 }
