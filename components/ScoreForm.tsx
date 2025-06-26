@@ -22,30 +22,33 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwcTJxJPBUI2qG0e5FsrqCXTITLmUvK5w5xEUWKLlWl9ubpvZTAFaY8oqJRPz3dhEgPhFw/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfyc.../exec', // ✅ reemplazá con tu URL completa del script desplegado
+        {
+          method: 'POST',
+          mode: 'no-cors', // Google Apps Script requiere esto para evitar problemas CORS
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-      if (response.ok) {
-        setSuccess(true);
-        setError(false);
-        setFormData({
-          jugador: '',
-          fecha: '',
-          club: '',
-          gross: '',
-          neto: '',
-          birdies: '',
-        });
-      } else {
-        throw new Error('Error al enviar');
-      }
+      // No se puede leer la respuesta si se usa no-cors, así que asumimos éxito si no hay error
+      setSuccess(true);
+      setError(false);
+      setFormData({
+        jugador: '',
+        fecha: '',
+        club: '',
+        gross: '',
+        neto: '',
+        birdies: '',
+      });
     } catch (err) {
-      console.error('Error al enviar el formulario:', err);
-      setError(true);
+      console.error('Error al enviar el score:', err);
       setSuccess(false);
+      setError(true);
     }
   };
 
@@ -135,10 +138,9 @@ export default function ScoreForm() {
           ✅ Score cargado con éxito
         </p>
       )}
-
       {error && (
-        <p className="mt-4 text-red-700 font-semibold flex items-center justify-center">
-          ❌ Hubo un error al enviar el score. Reintentá.
+        <p className="mt-4 text-red-600 font-semibold flex items-center justify-center">
+          ❌ Hubo un error al cargar el score
         </p>
       )}
     </form>
