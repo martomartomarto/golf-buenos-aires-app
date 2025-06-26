@@ -4,10 +4,11 @@ export default function ScoreForm() {
   const [form, setForm] = useState({
     nombre: "",
     fecha: "",
+    jugador: "",
     club: "",
     gross: "",
     neto: "",
-    birdies: "",
+    birdies: ""
   });
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -32,14 +33,7 @@ export default function ScoreForm() {
 
       if (response.ok) {
         setStatus("success");
-        setForm({
-          nombre: "",
-          fecha: "",
-          club: "",
-          gross: "",
-          neto: "",
-          birdies: "",
-        });
+        setForm({ nombre: "", fecha: "", jugador: "", club: "", gross: "", neto: "", birdies: "" });
       } else {
         throw new Error("Error al enviar");
       }
@@ -55,6 +49,7 @@ export default function ScoreForm() {
       {[
         { name: "nombre", placeholder: "Nombre" },
         { name: "fecha", placeholder: "Fecha (DD/MM/AAAA)" },
+        { name: "jugador", placeholder: "Jugador" },
         { name: "club", placeholder: "Club" },
         { name: "gross", placeholder: "Gross" },
         { name: "neto", placeholder: "Neto" },
@@ -81,4 +76,3 @@ export default function ScoreForm() {
     </form>
   );
 }
-
