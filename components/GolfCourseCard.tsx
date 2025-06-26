@@ -7,7 +7,7 @@ interface GolfCourse {
   "Código Postal": string;
   Teléfono: string;
   maps_url: string;
-  rating: string; // <-- Antes estaba como number, ahora string para coincidir con el JSON
+  rating: string | number; // ✅ ahora acepta ambos tipos
 }
 
 const GolfCourseCard: React.FC<{ course: GolfCourse }> = ({ course }) => {
@@ -15,7 +15,9 @@ const GolfCourseCard: React.FC<{ course: GolfCourse }> = ({ course }) => {
     <div className="bg-white bg-opacity-90 p-4 rounded shadow-md">
       <h2 className="text-xl font-semibold mb-2">{course.Nombre}</h2>
       <p className="text-sm">{course.Dirección}</p>
-      <p className="text-sm">{course.Localidad}, CP: {course["Código Postal"]}</p>
+      <p className="text-sm">
+        {course.Localidad}, CP: {course["Código Postal"]}
+      </p>
       <p className="text-sm">Tel: {course.Teléfono}</p>
       <a
         href={course.maps_url}
