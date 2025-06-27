@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Papa from 'papaparse';
 
-interface ScoreEntry {
-  Club: string;
-  Fecha: string;
+interface ResumenJugador {
   Jugador: string;
-  Gross: string;
-  Neto: string;
-  Birdies: string;
+  Club: string;
+  'Cantidad de veces Jugadas': string;
+  'Mejor Gross': string;
+  'Mejor Neto': string;
+  'Max Birdies': string;
 }
 
 export default function JugadoresPage() {
-  const [resumen, setResumen] = useState<Record<string, { total: number; count: number }>>({});
+  const [resumen, setResumen] = useState<ResumenJugador[]>([]);
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
@@ -20,27 +20,13 @@ export default function JugadoresPage() {
       .then(csv => {
         const parsed = Papa.parse(csv, {
           header: true,
-          transformHeader: (header: string) => header.trim(),
+          transformHeader: (h) => h.trim(),
           skipEmptyLines: true,
-        }) as Papa.ParseResult<ScoreEntry>;
-
-        const data = parsed.data;
-        console.log('🧪 Data cruda:', data);
-
-        const resumenData: Record<string, { total: number; count: number }> = {};
-
-        data.forEach(entry => {
-          if (!entry.Jugador || !entry.Neto) return;
-
-          if (!resumenData[entry.Jugador]) {
-            resumenData[entry.Jugador] = { total: 0, count: 0 };
-          }
-
-          resumenData[entry.Jugador].total += Number(entry.Neto);
-          resumenData[entry.Jugador].count += 1;
         });
 
-        setResumen(resumenData);
+        const data = parsed.data as ResumenJugador[];
+        const filtrado = data.filter(d => d.Jugador); // evita headers duplicados o vacíos
+        setResumen(filtrado);
       });
   }, []);
 
@@ -66,18 +52,22 @@ export default function JugadoresPage() {
           <thead>
             <tr className="bg-gray-200 text-left">
               <th className="border px-4 py-2">Jugador</th>
-              <th className="border px-4 py-2">Promedio Neto</th>
-              <th className="border px-4 py-2">Rondas</th>
+              <th className="border px-4 py-2">Club</th>
+              <th className="border px-4 py-2">Veces Jugadas</th>
+              <th className="border px-4 py-2">Mejor Gross</th>
+              <th className="border px-4 py-2">Mejor Neto</th>
+              <th className="border px-4 py-2">Max Birdies</th>
             </tr>
           </thead>
           <tbody>
-            {Object.entries(resumen).map(([jugador, stats]) => (
-              <tr key={jugador} className="hover:bg-gray-100">
-                <td className="border px-4 py-2">{jugador}</td>
-                <td className="border px-4 py-2">
-                  {(stats.total / stats.count).toFixed(2)}
-                </td>
-                <td className="border px-4 py-2">{stats.count}</td>
+            {resumen.map((entry, i) => (
+              <tr key={i} className="hover:bg-gray-100">
+                <td className="border px-4 py-2">{entry.Jugador}</td>
+                <td className="border px-4 py-2">{entry.Club}</td>
+                <td className="border px-4 py-2">{entry['Cantidad de veces Jugadas']}</td>
+                <td className="border px-4 py-2">{entry['Mejor Gross']}</td>
+                <td className="border px-4 py-2">{entry['Mejor Neto']}</td>
+                <td className="border px-4 py-2">{entry['Max Birdies']}</td>
               </tr>
             ))}
           </tbody>
@@ -86,3 +76,4 @@ export default function JugadoresPage() {
     </>
   );
 }
+
