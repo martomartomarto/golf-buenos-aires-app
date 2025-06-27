@@ -3,33 +3,29 @@ import Head from 'next/head';
 import Papa from 'papaparse';
 
 interface ScoreEntry {
-  club: string;
-  fecha: string;
-  jugador: string;
-  gross: string;
-  neto: string;
-  birdies: string;
+  Club: string;
+  Fecha: string;
+  Jugador: string;
+  Gross: string;
+  Neto: string;
+  Birdies: string;
 }
 
-export default function PersonsPage() {
+export default function PlayersPage() {
   const [resumen, setResumen] = useState<Record<string, { total: number; count: number }>>({});
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed = Papa.parse<ScoreEntry>(csv, {
-          header: true,
-          transformHeader: (header) => header.toLowerCase().trim(), // <- clave
-        });
-
+        const parsed = Papa.parse(csv, { header: true });
         const data = parsed.data as ScoreEntry[];
 
         const resumenData: Record<string, { total: number; count: number }> = {};
 
         data.forEach(entry => {
-          const jugador = entry.jugador;
-          const neto = Number(entry.neto);
+          const jugador = entry.Jugador;
+          const neto = Number(entry.Neto);
 
           if (!jugador || isNaN(neto)) return;
 
