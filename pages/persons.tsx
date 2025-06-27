@@ -11,30 +11,32 @@ interface ScoreEntry {
   Birdies: string;
 }
 
-export default function PlayersPage() {
+export default function JugadoresPage() {
   const [resumen, setResumen] = useState<Record<string, { total: number; count: number }>>({});
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed = Papa.parse(csv, { header: true });
-        const data = parsed.data as ScoreEntry[];
+        const parsed = Papa.parse<ScoreEntry>(csv, {
+          header: true,
+          transformHeader: (header) => header.trim(), // Limpia espacios extra
+        });
+
+        console.log('🧪 Data cruda:', parsed.data); // Acá inspeccionamos los headers reales
+
+        const data = parsed.data;
 
         const resumenData: Record<string, { total: number; count: number }> = {};
 
         data.forEach(entry => {
-          const jugador = entry.Jugador;
-          const neto = Number(entry.Neto);
+          if (!entry.Jugador || !entry.Neto) return;
 
-          if (!jugador || isNaN(neto)) return;
-
-          if (!resumenData[jugador]) {
-            resumenData[jugador] = { total: 0, count: 0 };
+          if (!resumenData[entry.Jugador]) {
+            resumenData[entry.Jugador] = { total: 0, count: 0 };
           }
-
-          resumenData[jugador].total += neto;
-          resumenData[jugador].count += 1;
+          resumenData[entry.Jugador].total += Number(entry.Neto);
+          resumenData[entry.Jugador].count += 1;
         });
 
         setResumen(resumenData);
@@ -83,3 +85,4 @@ export default function PlayersPage() {
     </>
   );
 }
+
