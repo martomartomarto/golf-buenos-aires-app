@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Papa, { ParseResult } from 'papaparse';
+import Papa from 'papaparse';
 
 interface ScoreEntry {
   Club: string;
@@ -18,7 +18,7 @@ export default function JugadoresPage() {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed: ParseResult<ScoreEntry> = Papa.parse<ScoreEntry>(csv, {
+        const parsed = Papa.parse<ScoreEntry>(csv, {
           header: true,
           transformHeader: (header: string) => header.trim(),
           skipEmptyLines: true,
@@ -86,4 +86,5 @@ export default function JugadoresPage() {
     </>
   );
 }
+
 
