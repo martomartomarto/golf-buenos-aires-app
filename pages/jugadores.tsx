@@ -18,11 +18,11 @@ export default function JugadoresPage() {
     fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec')
       .then(response => response.text())
       .then(csv => {
-        const parsed = Papa.parse<ScoreEntry>(csv, {
+        const parsed = Papa.parse(csv, {
           header: true,
           transformHeader: (header: string) => header.trim(),
           skipEmptyLines: true,
-        });
+        }) as Papa.ParseResult<ScoreEntry>;
 
         const data = parsed.data;
         console.log('🧪 Data cruda:', data);
@@ -86,5 +86,3 @@ export default function JugadoresPage() {
     </>
   );
 }
-
-
