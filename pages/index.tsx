@@ -16,11 +16,11 @@ export default function Home() {
         <title>Canchas de Golf en Buenos Aires</title>
       </Head>
 
-      {/* Este <main> no tiene color de fondo, por lo que usará el color beige del body */}
       <main className="px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
-            <h1 className="font-serif text-4xl md:text-5xl font-bold text-masters-green text-center md:text-left">
+            {/* Título actualizado a un color más oscuro para mejor contraste */}
+            <h1 className="font-serif text-4xl md:text-5xl font-bold text-masters-dark text-center md:text-left">
               Canchas de Golf
             </h1>
             <div className="flex flex-col sm:flex-row justify-end gap-3">
