@@ -67,7 +67,7 @@ export default function ScoreForm() {
       className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md mx-auto text-black"
     >
       <h2 className="text-2xl font-bold mb-6 text-center">
-        ⛳️Do not cheat you lame ass player⛳️
+        Formulario
       </h2>
 
       {/* Reemplazamos el input por un select para el jugador */}
