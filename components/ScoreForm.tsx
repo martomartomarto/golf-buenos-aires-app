@@ -22,11 +22,12 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
+      // 👇 AQUÍ SE ACTUALIZA LA URL 👇
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec',
+        'https://script.google.com/macros/s/AKfycbx00ZPnvznUgPV0SZ3-179id8nwdm0P6Yvn5t8v8vDg5dI8rH5hChtpUjePBS-xHjUd_g/exec',
         {
           method: 'POST',
-          mode: 'no-cors', // importante para evitar bloqueos CORS si no hay cabeceras adecuadas en el GAS
+          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -34,7 +35,6 @@ export default function ScoreForm() {
         }
       );
 
-      // no-cors hace que no podamos leer la respuesta, así que asumimos éxito
       setSuccess(true);
       setFormData({
         jugador: '',
