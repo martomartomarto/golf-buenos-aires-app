@@ -20,8 +20,9 @@ interface JugadoresPageProps {
 export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
   const [selectedPlayer, setSelectedPlayer] = useState('');
 
-  // Obtenemos una lista de jugadores únicos para el filtro
-  const playerNames = [...new Set(resumen.map(item => item.Jugador))];
+  // 👇 AQUÍ ESTÁ LA CORRECCIÓN 👇
+  // Cambiamos `[...new Set(...)]` por `Array.from(new Set(...))` para compatibilidad.
+  const playerNames = Array.from(new Set(resumen.map(item => item.Jugador)));
 
   // Filtramos los resultados basados en el jugador seleccionado
   const filteredResumen = selectedPlayer
