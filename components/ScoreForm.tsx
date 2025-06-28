@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import golfCourses from '../data/golf-courses.enriched.json';
 
+// Lista de jugadores autorizados
+const players = [
+  'Lucas Roldan',
+  'Martin Mastrogiacomo',
+  'Nicolas Chimmalez',
+  'Facundo Garcia',
+  'Gonzalo Campi',
+  'Tomas Manfredini',
+];
+
 export default function ScoreForm() {
   const [formData, setFormData] = useState({
     jugador: '',
@@ -22,7 +32,6 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      // 👇 URL actualizada 👇
       const response = await fetch(
         'https://script.google.com/macros/s/AKfycby3TRxfCQo0hVSKnfT7l2uvhlMRyBfM39-Gt3ugAZKNtdiNLo5FCiFr_xy0Uzo1JOM-gg/exec',
         {
@@ -61,15 +70,21 @@ export default function ScoreForm() {
         ⛳️Do not cheat you lame ass player⛳️
       </h2>
 
-      <input
+      {/* Reemplazamos el input por un select para el jugador */}
+      <select
         name="jugador"
-        type="text"
-        placeholder="Jugador"
         value={formData.jugador}
         onChange={handleChange}
         className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
         required
-      />
+      >
+        <option value="">Seleccioná un jugador</option>
+        {players.map((player) => (
+          <option key={player} value={player}>
+            {player}
+          </option>
+        ))}
+      </select>
 
       <input
         name="fecha"
