@@ -69,8 +69,11 @@ export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  // 👇 AQUÍ SE ACTUALIZA LA URL 👇
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx00ZPnvznUgPV0SZ3-179id8nwdm0P6Yvn5t8v8vDg5dI8rH5hChtpUjePBS-xHjUd_g/exec';
+
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec');
+    const response = await fetch(SCRIPT_URL);
     if (!response.ok) {
       throw new Error('No se pudo obtener la información del servidor.');
     }
@@ -78,7 +81,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     
     const parsed = Papa.parse(csv, {
       header: true,
-      // ✨ LA CORRECCIÓN ESTÁ AQUÍ ✨
       transformHeader: (h: string) => h.trim(),
       skipEmptyLines: true,
     });
