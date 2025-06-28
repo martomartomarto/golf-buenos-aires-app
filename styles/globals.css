@@ -1,14 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  background-image: url('/Augusta.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  font-family: 'Poppins', sans-serif;
+  /*
+    Usamos el nuevo color de fondo y de texto definidos en el tema
+    y nos aseguramos de que no haya una imagen de fondo.
+  */
+  background-color: theme('colors.masters.light');
+  color: theme('colors.masters.dark');
+  background-image: none;
 }
