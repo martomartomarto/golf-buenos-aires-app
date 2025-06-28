@@ -14,28 +14,27 @@ export default function Home() {
     <>
       <Head>
         <title>Canchas de Golf en Buenos Aires</title>
-        <meta name="description" content="Listado de canchas de golf" />
       </Head>
 
-      <main className="min-h-screen px-4 sm:px-6 lg:px-8 py-10 text-white">
+      {/* Este <main> no tiene color de fondo, por lo que usará el color beige del body */}
+      <main className="px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-7xl mx-auto">
-          {/* --- Contenedor de Cabecera Responsivo --- */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-center md:text-left font-poppins">
-              Canchas de Golf en BA
+            <h1 className="font-serif text-4xl md:text-5xl font-bold text-masters-green text-center md:text-left">
+              Canchas de Golf
             </h1>
             <div className="flex flex-col sm:flex-row justify-end gap-3">
               <a
                 href="/jugadores"
-                className="w-full sm:w-auto text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
+                className="w-full sm:w-auto text-center bg-masters-dark hover:bg-black text-white font-semibold py-2 px-5 rounded-md uppercase tracking-wider text-sm"
               >
-                Ver resumen
+                Resumen
               </a>
               <a
                 href="/scores"
-                className="w-full sm:w-auto text-center bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full sm:w-auto text-center bg-masters-green hover:opacity-90 text-white font-semibold py-2 px-5 rounded-md uppercase tracking-wider text-sm"
               >
-                Cargar score
+                Cargar Score
               </a>
             </div>
           </div>
@@ -43,10 +42,10 @@ export default function Home() {
           <div className="flex justify-center mb-8">
             <input
               type="text"
-              placeholder="Buscar club..."
+              placeholder="Buscar club por nombre..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="p-2 rounded text-black w-full max-w-md"
+              className="p-3 rounded-md border-2 border-gray-300 focus:border-masters-green focus:ring-0 w-full max-w-lg"
             />
           </div>
 
