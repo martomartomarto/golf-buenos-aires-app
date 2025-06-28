@@ -16,7 +16,6 @@ interface JugadoresPageProps {
   error?: string;
 }
 
-// El componente de la página ahora recibe los datos directamente como props
 export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
   return (
     <>
@@ -69,7 +68,6 @@ export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
   );
 }
 
-// Esta función se ejecuta en el servidor antes de renderizar la página
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbwacjFtn_0IJzMIbBvKU6xl41YFveKKelGd8rhqrGZMrb2zOn6s-DBtzDS7nf6r2hBZWQ/exec');
@@ -80,11 +78,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
     
     const parsed = Papa.parse(csv, {
       header: true,
-      transformHeader: (h) => h.trim(),
+      // ✨ LA CORRECCIÓN ESTÁ AQUÍ ✨
+      transformHeader: (h: string) => h.trim(),
       skipEmptyLines: true,
     });
 
-    const data = (parsed.data as ResumenJugador[]).filter(d => d.Jugador); // Filtra líneas vacías
+    const data = (parsed.data as ResumenJugador[]).filter(d => d.Jugador);
 
     return {
       props: {
