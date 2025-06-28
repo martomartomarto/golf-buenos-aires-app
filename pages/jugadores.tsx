@@ -33,4 +33,70 @@ export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
           </a>
         </div>
 
-        <h1 className="text-3xl font-bold mb-6 text-center">Resumen
+        <h1 className="text-3xl font-bold mb-6 text-center">Resumen por Jugador</h1>
+        
+        {error ? (
+          <p className="text-red-500 text-center">{error}</p>
+        ) : (
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="border px-4 py-2">Jugador</th>
+                <th className="border px-4 py-2">Club</th>
+                <th className="border px-4 py-2">Veces Jugadas</th>
+                <th className="border px-4 py-2">Mejor Gross</th>
+                <th className="border px-4 py-2">Mejor Neto</th>
+                <th className="border px-4 py-2">Max Birdies</th>
+              </tr>
+            </thead>
+            <tbody>
+              {resumen.map((entry, i) => (
+                <tr key={i} className="hover:bg-gray-100">
+                  <td className="border px-4 py-2">{entry.Jugador}</td>
+                  <td className="border px-4 py-2">{entry.Club}</td>
+                  <td className="border px-4 py-2">{entry['Cantidad de veces Jugadas']}</td>
+                  <td className="border px-4 py-2">{entry['Mejor Gross']}</td>
+                  <td className="border px-4 py-2">{entry['Mejor Neto']}</td>
+                  <td className="border px-4 py-2">{entry['Max Birdies']}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </main>
+    </> // 👈 Esta es la etiqueta de cierre que probablemente faltaba.
+  );
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3TRxfCQo0hVSKnfT7l2uvhlMRyBfM39-Gt3ugAZKNtdiNLo5FCiFr_xy0Uzo1JOM-gg/exec';
+
+  try {
+    const response = await fetch(SCRIPT_URL);
+    if (!response.ok) {
+      throw new Error('No se pudo obtener la información del servidor.');
+    }
+    const csv = await response.text();
+    
+    const parsed = Papa.parse(csv, {
+      header: true,
+      transformHeader: (h: string) => h.trim(),
+      skipEmptyLines: true,
+    });
+
+    const data = (parsed.data as ResumenJugador[]).filter(d => d.Jugador);
+
+    return {
+      props: {
+        resumen: data,
+      },
+    };
+  } catch (err: any) {
+    return {
+      props: {
+        resumen: [],
+        error: err.message || 'Error al cargar los datos.',
+      },
+    };
+  }
+};
