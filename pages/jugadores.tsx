@@ -1,102 +1,158 @@
-import Head from 'next/head';
-import Papa from 'papaparse';
-import type { GetServerSideProps } from 'next';
+import { useState } from 'react';
+import golfCourses from '../data/golf-courses.enriched.json';
 
-interface ResumenJugador {
-  Jugador: string;
-  Club: string;
-  'Cantidad de veces Jugadas': string;
-  'Mejor Gross': string;
-  'Mejor Neto': string;
-  'Max Birdies': string;
-}
+// Lista de jugadores autorizados
+const players = [
+  'Lucas Roldan',
+  'Martin Mastrogiacomo',
+  'Nicolas Chimmalez',
+  'Facundo Garcia',
+  'Gonzalo Campi',
+  'Tomas Manfredini',
+];
 
-interface JugadoresPageProps {
-  resumen: ResumenJugador[];
-  error?: string;
-}
+export default function ScoreForm() {
+  const [formData, setFormData] = useState({
+    jugador: '',
+    fecha: '',
+    club: '',
+    gross: '',
+    neto: '',
+    birdies: '',
+  });
 
-export default function JugadoresPage({ resumen, error }: JugadoresPageProps) {
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycby3TRxfCQo0hVSKnfT7l2uvhlMRyBfM39-Gt3ugAZKNtdiNLo5FCiFr_xy0Uzo1JOM-gg/exec',
+        {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      setSuccess(true);
+      setFormData({
+        jugador: '',
+        fecha: '',
+        club: '',
+        gross: '',
+        neto: '',
+        birdies: '',
+      });
+    } catch (error) {
+      console.error('Error al enviar el score:', error);
+      alert('Error de red al enviar el score.');
+    }
+  };
+
+  const clubOptions = golfCourses.map(c => c.Nombre).sort();
+
   return (
-    <>
-      <Head>
-        <title>Resumen por Jugador</title>
-      </Head>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md mx-auto text-black"
+    >
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        ⛳️Do not cheat you lame ass player⛳️
+      </h2>
 
-      <main className="min-h-screen p-10 bg-white bg-opacity-90 font-poppins">
-        <div className="mb-6">
-          <a
-            href="/"
-            className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded"
-          >
-            ← Volver al inicio
-          </a>
-        </div>
+      {/* Reemplazamos el input por un select para el jugador */}
+      <select
+        name="jugador"
+        value={formData.jugador}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      >
+        <option value="">Seleccioná un jugador</option>
+        {players.map((player) => (
+          <option key={player} value={player}>
+            {player}
+          </option>
+        ))}
+      </select>
 
-        <h1 className="text-3xl font-bold mb-6 text-center">Resumen por Jugador</h1>
-        
-        {error ? (
-          <p className="text-red-500 text-center">{error}</p>
-        ) : (
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="border px-4 py-2">Jugador</th>
-                <th className="border px-4 py-2">Club</th>
-                <th className="border px-4 py-2">Veces Jugadas</th>
-                <th className="border px-4 py-2">Mejor Gross</th>
-                <th className="border px-4 py-2">Mejor Neto</th>
-                <th className="border px-4 py-2">Max Birdies</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resumen.map((entry, i) => (
-                <tr key={i} className="hover:bg-gray-100">
-                  <td className="border px-4 py-2">{entry.Jugador}</td>
-                  <td className="border px-4 py-2">{entry.Club}</td>
-                  <td className="border px-4 py-2">{entry['Cantidad de veces Jugadas']}</td>
-                  <td className="border px-4 py-2">{entry['Mejor Gross']}</td>
-                  <td className="border px-4 py-2">{entry['Mejor Neto']}</td>
-                  <td className="border px-4 py-2">{entry['Max Birdies']}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </main>
-    </> // 👈 Esta es la etiqueta de cierre que probablemente faltaba.
+      <input
+        name="fecha"
+        type="text"
+        placeholder="Fecha (DD/MM/AAAA)"
+        value={formData.fecha}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      />
+
+      <select
+        name="club"
+        value={formData.club}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      >
+        <option value="">Seleccioná un club</option>
+        {clubOptions.map((club, i) => (
+          <option key={i} value={club}>
+            {club}
+          </option>
+        ))}
+      </select>
+
+      <input
+        name="gross"
+        type="number"
+        placeholder="Gross"
+        value={formData.gross}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      />
+
+      <input
+        name="neto"
+        type="number"
+        placeholder="Neto"
+        value={formData.neto}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      />
+
+      <input
+        name="birdies"
+        type="number"
+        placeholder="Birdies"
+        value={formData.birdies}
+        onChange={handleChange}
+        className="mb-4 px-4 py-2 w-full rounded border border-gray-300"
+        required
+      />
+
+      <button
+        type="submit"
+        className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded"
+      >
+        Enviar
+      </button>
+
+      {success && (
+        <p className="mt-4 text-green-700 font-semibold flex items-center justify-center">
+          ✅ Score cargado con éxito
+        </p>
+      )}
+    </form>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3TRxfCQo0hVSKnfT7l2uvhlMRyBfM39-Gt3ugAZKNtdiNLo5FCiFr_xy0Uzo1JOM-gg/exec';
-
-  try {
-    const response = await fetch(SCRIPT_URL);
-    if (!response.ok) {
-      throw new Error('No se pudo obtener la información del servidor.');
-    }
-    const csv = await response.text();
-    
-    const parsed = Papa.parse(csv, {
-      header: true,
-      transformHeader: (h: string) => h.trim(),
-      skipEmptyLines: true,
-    });
-
-    const data = (parsed.data as ResumenJugador[]).filter(d => d.Jugador);
-
-    return {
-      props: {
-        resumen: data,
-      },
-    };
-  } catch (err: any) {
-    return {
-      props: {
-        resumen: [],
-        error: err.message || 'Error al cargar los datos.',
-      },
-    };
-  }
-};
