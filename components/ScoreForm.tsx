@@ -22,9 +22,9 @@ export default function ScoreForm() {
     e.preventDefault();
 
     try {
-      // 👇 AQUÍ SE ACTUALIZA LA URL 👇
+      // 👇 URL actualizada 👇
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbx00ZPnvznUgPV0SZ3-179id8nwdm0P6Yvn5t8v8vDg5dI8rH5hChtpUjePBS-xHjUd_g/exec',
+        'https://script.google.com/macros/s/AKfycby3TRxfCQo0hVSKnfT7l2uvhlMRyBfM39-Gt3ugAZKNtdiNLo5FCiFr_xy0Uzo1JOM-gg/exec',
         {
           method: 'POST',
           mode: 'no-cors',
